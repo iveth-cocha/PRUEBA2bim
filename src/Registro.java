@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Registro {
@@ -77,6 +78,13 @@ public class Registro {
                 actualizar(idx,cedx,namx,fax,sigx);
             }
         });
+        buscarPorCodigoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                idx = cod.getText().trim();
+                buscarPorCodigo(idx);
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -130,6 +138,32 @@ public class Registro {
             stmt.executeUpdate(query2);
             JOptionPane.showMessageDialog(null, "Informacion actualizada ");
         }catch (Exception el){
+            throw new RuntimeException(el);
+        }
+    }
+
+
+    public static void buscarPorNombre(String nom) {
+        String query4 = "SELECT * FROM Informacion WHERE nombre = '" + nom + "'";
+
+        try (
+                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                Statement stmt = conn.createStatement();
+                ResultSet rs= stmt.executeQuery(query4);
+
+        ) {
+            if (rs.next()) {
+                String id = rs.getString("codico");
+                String cedu = rs.getString("cedula");
+                String name = rs.getString("nombre");
+                String fna = rs.getString("fecha_nacimiento");
+                String sig = rs.getString("signo");
+
+                JOptionPane.showMessageDialog(null, "Cédula: " + cedu + "\nNombre: " + name + "\nFecha de nacimiento: " + fna + "\nSigno: " + sig);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró ningún registro con el nombre " + nom);
+            }
+        } catch (Exception el) {
             throw new RuntimeException(el);
         }
     }
