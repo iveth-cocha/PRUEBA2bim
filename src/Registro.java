@@ -143,8 +143,8 @@ public class Registro {
     }
 
 
-    public static void buscarPorNombre(String nom) {
-        String query4 = "SELECT * FROM Informacion WHERE nombre = '" + nom + "'";
+    public static void buscarPorCodigo(String id) {
+        String query4 = "SELECT * FROM Informacion WHERE codico = '" + id + "'";
 
         try (
                 Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -153,7 +153,6 @@ public class Registro {
 
         ) {
             if (rs.next()) {
-                String id = rs.getString("codico");
                 String cedu = rs.getString("cedula");
                 String name = rs.getString("nombre");
                 String fna = rs.getString("fecha_nacimiento");
@@ -161,7 +160,7 @@ public class Registro {
 
                 JOptionPane.showMessageDialog(null, "Cédula: " + cedu + "\nNombre: " + name + "\nFecha de nacimiento: " + fna + "\nSigno: " + sig);
             } else {
-                JOptionPane.showMessageDialog(null, "No se encontró ningún registro con el nombre " + nom);
+                JOptionPane.showMessageDialog(null, "No se encontró ningún registro con el código " + id);
             }
         } catch (Exception el) {
             throw new RuntimeException(el);
